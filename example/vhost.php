@@ -2,16 +2,16 @@
 function autoload($className)
 {
     $className = ltrim($className, '\\');
-    $fileName  = '';
+    $serverName  = '';
     $namespace = '';
     if ($lastNsPos = strripos($className, '\\')) {
         $namespace = substr($className, 0, $lastNsPos);
         $className = substr($className, $lastNsPos + 1);
-        $fileName  = str_replace('\\', DIRECTORY_SEPARATOR, $namespace) . DIRECTORY_SEPARATOR;
+        $serverName  = str_replace('\\', DIRECTORY_SEPARATOR, $namespace) . DIRECTORY_SEPARATOR;
     }
-    $fileName .= str_replace('_', DIRECTORY_SEPARATOR, $className) . '.php';
+    $serverName .= str_replace('_', DIRECTORY_SEPARATOR, $className) . '.php';
 
-    require $fileName;
+    require $serverName;
 }
 spl_autoload_register('autoload');
 
@@ -21,21 +21,21 @@ set_include_path(
 	get_include_path() );
 
 
-$file=new \Confgen\Nginx\File();
+$server=new \Confgen\Nginx\Module\Http\Server();
 
-$file->addDirective(
+$server->addDirective(
 		(new \Confgen\Nginx\Module\Http\Listen())
-		->setFile('x')
+		->setPort(81)
 	)
 	->addDirective(
-		(new \Confgen\Nginx\Module\Http\Listen())
+		(new \Confgen\Nginx\Module\Core\Inc())
 		->setFile('y')
 	)
 	->addDirective(
-		(new \Confgen\Nginx\Module\Http\Listen())
+		(new \Confgen\Nginx\Module\Core\Inc())
 		->setFile('*')
 	);
 
 
 $formater=new \Confgen\Nginx\Formater();
-echo $formater->format($file);
+echo $formater->format($server);

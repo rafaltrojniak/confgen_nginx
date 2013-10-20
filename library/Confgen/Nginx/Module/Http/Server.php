@@ -1,7 +1,6 @@
 <?php
 /**
  * Class for server directive
- * TODO Implement directive logic
  **/
 namespace Confgen\Nginx\Module\Http;
 use Confgen\Nginx\Directive;
